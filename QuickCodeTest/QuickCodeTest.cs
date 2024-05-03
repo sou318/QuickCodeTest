@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using QuickCodeTest.CodeFile;
 using System.Reflection;
 
 namespace QuickCodeTest
@@ -23,31 +23,35 @@ namespace QuickCodeTest
             }
 
 
-            var exeArgs  = args[1..]; // 実行ファイルに渡す引数
+            var execArgs  = args[1..]; // 実行ファイルに渡す引数
 
 
             // ドットも付いてくるのでスライス
             var ext = Path.GetExtension(file).ToLower()[1..];
-            var runFile = Guid.NewGuid().ToString() + ".exe";
 
 
             // コンパイル
-            switch (ext)
+            var codeFile = ext switch
             {
-                case "cs":
-                    Module.RunProcess("csc", file, "/langversion:latest", "/nologo", $"-out:{runFile}");
-                    break;
-                default:
-                    Console.WriteLine("This extension i s not supported.");
-                    break;
+                "cs" => new CSharp(file),
+                _    => null
+            };
+
+
+            // 非対応ファイル
+            if (codeFile is null)
+            {
+                Console.WriteLine("This extension is not supported.");
+                return;
             }
 
 
-            // コンパイルに成功していれば実行
-            if (File.Exists(runFile))
+            // コンパイルと実行
+            codeFile.Compile();
+            if (codeFile.ExistsExecFile())
             {
-                Module.RunProcess(runFile, exeArgs);
-                File.Delete(runFile);
+                codeFile.Run(execArgs);
+                codeFile.DeleteExecFile();
             }
         }
     }

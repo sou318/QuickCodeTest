@@ -9,21 +9,19 @@ namespace QuickCodeTest
         /// プロセスが終了するまで待機します。
         /// 実行したプロセスの標準入力には対応していません。
         /// </summary>
-        /// <param name="fileName">実行するファイル</param>
+        /// <param name="execFile">実行するファイル</param>
         /// <param name="args">起動引数</param>
-        public static void RunProcess(string fileName, params string[] args)
+        public static int RunProcess(string execFile, params string[] args)
         {
-            // ログ処理
-            static void LogWrite(object sender, DataReceivedEventArgs e)
-            {
-                if (string.IsNullOrEmpty(e.Data)) { return; }
-                Console.WriteLine(e.Data);
-            }
+            /*
+            パスが通っている物を実行する場合もあるので、ここでファイル存在確認をしないでください。
+            */
 
 
+            // プロセス用意
             var process = new Process()
             {
-                StartInfo = new(fileName, args)
+                StartInfo = new(execFile, args)
                 {
                     // CreateNoWindowをtrueにするとフリーズします。
                     UseShellExecute = false,
@@ -33,6 +31,11 @@ namespace QuickCodeTest
             };
 
             // ログ受け取りイベント登録
+            static void LogWrite(object sender, DataReceivedEventArgs e)
+            {
+                if (string.IsNullOrEmpty(e.Data)) { return; }
+                Console.WriteLine(e.Data);
+            }
             process.OutputDataReceived += LogWrite;
             process. ErrorDataReceived += LogWrite;
 
@@ -45,7 +48,21 @@ namespace QuickCodeTest
 
             // 終了
             process.WaitForExit();
+            var exitCode = process.ExitCode;
             process.Close();
+            return exitCode;
+        }
+
+
+        // NOTE: CodeFileBaseに移動できそうであれば様子を見て移動する
+        /// <summary>
+        /// GUIDが名前のファイル名を作成します。
+        /// </summary>
+        /// <param name="extension">ファイル拡張子</param>
+        /// <returns>作成したファイル名</returns>
+        public static string CreateGuidFileName(string extension)
+        {
+            return Guid.NewGuid().ToString() + "." + extension;
         }
     }
 }
