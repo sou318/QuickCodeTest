@@ -31,10 +31,11 @@ namespace QuickCodeTest
 
 
             // コンパイル
-            var codeFile = ext switch
+            CodeFileBase? codeFile = ext switch
             {
-                "cs" => new CSharp(file),
-                _    => null
+                "cs"    => new CSharp(file),
+                "java"  => new Java(file),
+                _       => null
             };
 
 
@@ -53,6 +54,12 @@ namespace QuickCodeTest
                 codeFile.Run(execArgs);
                 codeFile.DeleteExecFile();
             }
+#if DEBUG
+            else
+            {
+                Console.WriteLine("[DEBUG] Compile failed : Executable file not found");
+            }
+#endif
         }
     }
 }

@@ -52,17 +52,5 @@ namespace QuickCodeTest
             process.Close();
             return exitCode;
         }
-
-
-        // NOTE: CodeFileBaseに移動できそうであれば様子を見て移動する
-        /// <summary>
-        /// GUIDが名前のファイル名を作成します。
-        /// </summary>
-        /// <param name="extension">ファイル拡張子</param>
-        /// <returns>作成したファイル名</returns>
-        public static string CreateGuidFileName(string extension)
-        {
-            return Guid.NewGuid().ToString() + "." + extension;
-        }
     }
 }

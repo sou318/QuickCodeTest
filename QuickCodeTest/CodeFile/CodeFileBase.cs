@@ -8,20 +8,21 @@
         /// <summary>
         /// 言語のコンパイルと実行を簡易化する為のクラス
         /// </summary>
-        /// <param name="ext">この言語の拡張子(ドットなし)</param>
+        /// <param name="ext">この言語の拡張子</param>
+        /// <param name="codeFile">ソースコードファイル</param>
         /// <param name="execExt">実行ファイルの拡張子</param>
-        /// <param name="file">ソースコードファイル</param>
+        /// <param name="execName">実行ファイルの名前</param>
         /// <exception cref="InvalidFileExtensionException">fileの拡張子がextと違った場合スローされます。</exception>
-        public CodeFileBase(string ext, string execExt, string file)
+        public CodeFileBase(string ext, string codeFile, string execExt, string? execName=null)
         {
-            if (!Path.GetExtension(file)[1..].EqualsIgnoreCase(ext))
+            if (!Path.GetExtension(codeFile)[1..].EqualsIgnoreCase(ext))
             {
                 throw new InvalidFileExtensionException("Required file extension: " + ext);
             }
 
 
-            codeFile = file;
-            execFile = Module.CreateGuidFileName(execExt);
+            this.codeFile = codeFile;
+            this.execFile = $"{execName ?? Guid.NewGuid().ToString()}.{execExt}";
         }
 
 

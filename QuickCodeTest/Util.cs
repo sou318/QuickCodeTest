@@ -10,5 +10,16 @@
         {
             return text.Equals(check, StringComparison.OrdinalIgnoreCase);
         }
+
+
+        /// <summary>
+        /// 拡張子以外のパスを取得します。
+        /// </summary>
+        /// <param name="path">取得するパス</param>
+        /// <returns>取得したパス</returns>
+        public static string GetPathWithoutExtension(string path)
+        {
+            return path[..(path.Length-Path.GetExtension(path).Length)];
+        }
     }
 }

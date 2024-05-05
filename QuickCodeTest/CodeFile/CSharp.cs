@@ -1,6 +1,6 @@
 ﻿namespace QuickCodeTest.CodeFile
 {
-    internal class CSharp(string file) : CodeFileBase("cs", "exe", file)
+    internal class CSharp(string file) : CodeFileBase("cs", file, "exe")
     {
         public override void Compile()
         {
