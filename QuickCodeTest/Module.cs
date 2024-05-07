@@ -7,7 +7,6 @@ namespace QuickCodeTest
         /// <summary>
         /// プロセスを実行し、ログを出力します。
         /// プロセスが終了するまで待機します。
-        /// 実行したプロセスの標準入力には対応していません。
         /// </summary>
         /// <param name="execFile">実行するファイル</param>
         /// <param name="args">起動引数</param>
