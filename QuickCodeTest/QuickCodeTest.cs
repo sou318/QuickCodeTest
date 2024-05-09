@@ -23,15 +23,13 @@ namespace QuickCodeTest
             }
 
 
+            // 変数初期化
             var execArgs  = args[1..]; // 実行ファイルに渡す引数
+            var fileExt = Path.GetExtension(file).ToLower()[1..]; // ドットも付いてくるのでスライス
 
 
-            // ドットも付いてくるのでスライス
-            var ext = Path.GetExtension(file).ToLower()[1..];
-
-
-            // コンパイル
-            CodeFileBase? codeFile = ext switch
+            // コードファイルインスタンス生成
+            CodeFileBase? codeFile = fileExt switch
             {
                 "cs"    => new CSharp(file),
                 "java"  => new Java(file),
@@ -39,7 +37,7 @@ namespace QuickCodeTest
             };
 
 
-            // 非対応ファイル
+            // 非対応拡張子
             if (codeFile is null)
             {
                 Console.WriteLine("This extension is not supported.");
